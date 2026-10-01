@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Copiar usuarios</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2230;--muted:#6b7488;--line:#d9dde6;--ok:#12805c;--okbg:#e2f5ed;--acc:#2e5bff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171e;--card:#1e222c;--ink:#e8ebf2;--muted:#98a1b5;--line:#343a49;--ok:#5fd6a5;--okbg:#17372c;--acc:#7b98ff}}
+:root[data-theme="dark"]{--bg:#14171e;--card:#1e222c;--ink:#e8ebf2;--muted:#98a1b5;--line:#343a49;--ok:#5fd6a5;--okbg:#17372c;--acc:#7b98ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;padding:20px 16px 40px}
+main{max-width:760px;margin:0 auto}
+h1{font-size:1.3rem;margin:0 0 4px}
+p{margin:0 0 16px;color:var(--muted);font-size:.95rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+button{font:inherit;text-align:left;cursor:pointer;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;word-break:break-all;min-height:44px}
+button:hover{border-color:var(--acc)}
+button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button span.t{font-size:.75rem;color:var(--muted);flex:none}
+button.ok{background:var(--okbg);border-color:var(--ok)}
+button.ok span.t{color:var(--ok);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<h1>Usuarios (54)</h1>
+<p>Toca un nombre y se copia solo ese, sin el @.</p>
+<div class="grid" id="g"></div>
+</main>
+<script>
+const names=`ffgosns Y4ss_mn tiburom27 Linda_16424 Filipe299929 tycoongames22 AlexDg1002 lindapl100 mami050101 25lakox1 Suioc248 jiradsal01 murilo3647479_TDR skincent_74 ArtiShabani71 PapaSpace26 Sebita2849_67 fuehydhkufv Capi11561 nazareno5301 ProLeo1609 ocaidomasndesitido Judyman55 emorslxl Carol282764 ejsvdhvd mew9195 pepepueek inceneroar75 Bw200421 JMA08_xO valentina089098 Fernanda1350_4 Alema_891 samydetemu3323 maimoydakis netol_107 HeyKyxzzz betwotsbsfwl244 Dinonuggets67944 gioia_Gioia126 rosabeba_2 00erro60 123koki70 Auzere67675 Noahgaming_07 miniakko5 User205129 mini_fofa442 Tommy24014 Spidey34888 Vinci4636 mm2op357 Roblox_user432345679`.split(" ");
+function copy(txt){
+  if(navigator.clipboard&&window.isSecureContext){
+    return navigator.clipboard.writeText(txt).catch(()=>fallback(txt));
+  }
+  return Promise.resolve(fallback(txt));
+}
+function fallback(txt){
+  const a=document.createElement("textarea");
+  a.value=txt;a.style.position="fixed";a.style.opacity="0";
+  document.body.appendChild(a);a.select();
+  try{document.execCommand("copy")}catch(e){}
+  a.remove();
+}
+const g=document.getElementById("g");
+names.forEach(n=>{
+  const b=document.createElement("button");
+  b.innerHTML='<span></span><span class="t">Copiar</span>';
+  b.firstChild.textContent=n;
+  b.addEventListener("click",()=>{
+    copy(n).then(()=>{
+      document.querySelectorAll("button.ok").forEach(x=>{x.classList.remove("ok");x.lastChild.textContent="Copiar"});
+      b.classList.add("ok");b.lastChild.textContent="Copiado";
+      setTimeout(()=>{b.classList.remove("ok");b.lastChild.textContent="Copiar"},1500);
+    });
+  });
+  g.appendChild(b);
+});
+</script>
+</body>
+</html>
