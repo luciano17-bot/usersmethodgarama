@@ -15,18 +15,20 @@ main{max-width:760px;margin:0 auto}
 h1{font-size:1.3rem;margin:0 0 4px}
 p{margin:0 0 16px;color:var(--muted);font-size:.95rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
-button{font:inherit;text-align:left;cursor:pointer;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;word-break:break-all;min-height:44px}
+button{font:inherit;text-align:left;cursor:pointer;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:8px;word-break:break-all;min-height:44px}
 button:hover{border-color:var(--acc)}
 button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button span.n{flex:none;min-width:26px;font-size:.75rem;font-weight:700;color:var(--acc)}
+button span.u{flex:1}
 button span.t{font-size:.75rem;color:var(--muted);flex:none}
 button.ok{background:var(--okbg);border-color:var(--ok)}
-button.ok span.t{color:var(--ok);font-weight:600}
+button.ok span.n,button.ok span.t{color:var(--ok);font-weight:600}
 </style>
 </head>
 <body>
 <main>
 <h1>Usuarios (54)</h1>
-<p>Toca un nombre y se copia solo ese, sin el @.</p>
+<p>Toca un nombre y se copia solo ese, sin el @. Los copiados quedan en verde hasta que refresques la página.</p>
 <div class="grid" id="g"></div>
 </main>
 <script>
@@ -45,15 +47,15 @@ function fallback(txt){
   a.remove();
 }
 const g=document.getElementById("g");
-names.forEach(n=>{
+names.forEach((n,i)=>{
   const b=document.createElement("button");
-  b.innerHTML='<span></span><span class="t">Copiar</span>';
-  b.firstChild.textContent=n;
+  b.innerHTML='<span class="n"></span><span class="u"></span><span class="t">Copiar</span>';
+  b.children[0].textContent=(i+1)+".";
+  b.children[1].textContent=n;
   b.addEventListener("click",()=>{
     copy(n).then(()=>{
-      document.querySelectorAll("button.ok").forEach(x=>{x.classList.remove("ok");x.lastChild.textContent="Copiar"});
-      b.classList.add("ok");b.lastChild.textContent="Copiado";
-      setTimeout(()=>{b.classList.remove("ok");b.lastChild.textContent="Copiar"},1500);
+      b.classList.add("ok");
+      b.lastChild.textContent="Copiado";
     });
   });
   g.appendChild(b);
